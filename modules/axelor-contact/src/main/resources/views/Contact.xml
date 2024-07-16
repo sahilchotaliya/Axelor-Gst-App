@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  https://axelor.com/xml/ns/object-views/object-views_6.0.xsd">
+
+    <grid name="contact-grid" title="Contacts" model="com.axelor.contact.db.Contact">
+    
+        <field name="fullName"/>
+        <field name="birthDate"/>
+        <field name="email"/>
+        <field name="phone"/>
+        <field name="isSubjectToTaxes"/>
+        <field name="address"/>
+        <field name="Archived"/>
+        
+        <button name="saleOrders" title="Sale Orders" onClick="action-contact-view-open-sale-order-lines-for-customer" 
+            icon="fa-user"/>
+
+    </grid>
+    
+    
+
+    <form name="contact-form" title="Contact"
+        model="com.axelor.contact.db.Contact" width="large">
+        <panel>
+            <panel>
+                <field name="image" widget="image"/>
+            </panel>
+            <panel title="Profile">
+                <field name="firstName" />
+                <field name="lastName"/>
+                <field name="title"/>
+                <field name="birthDate" onChange="action-contact-condition-change-birth-date"/>
+            </panel>
+        </panel>
+
+        <panel-tabs>
+            <panel title="Contact" css="panel-blue">
+
+                <field name="email" colSpan="3"></field>
+                <field name="phone" css="border-left-none" widget="phone"
+                    x-icon="fa-star-o" x-icon-active="fa-star" x-exclusive="true"
+                    colSpan="3" />
+
+                <field name="address" colSpan="6"></field>
+            </panel>
+            <panel title="Other Informations">
+                <field name="isSubjectToTaxes" widget="boolean-switch"></field>  
+        <field name="familyContactSet" widget="tagSelect" domain="self.fullName != :fullName" />
+                
+            </panel>
+
+        </panel-tabs>
+        <panel-dashlet title="Related sale order details" action="action.sale.orer.line.view.sale.order.lines.customer"/>
+        
+      <panel-mail>
+      <mail-messages limit="4" />
+      <mail-followers />
+    </panel-mail>
+
+    </form>
+    
+    <cards name="contact-card" title="Cards" model="com.axelor.contact.db.Contact" orderBy="fullName">
+      <field name="fullName" />
+      <field name="image" />
+      <field name="phone" />
+      <field name="email" />
+      <field name="address" />
+      <template><![CDATA[
+           <div class="span4 card-image" >
+          <strong style='margin-bottom:8px'>{{fullName}}</strong>
+            <img ng-src="{{$image(null, 'image')}}">
+            
+          </div>
+          <div class="span6">
+          <br>
+         
+          <i class="fa fa-phone"/><strong><a href="tel:{{phone}}">{{" "+phone}}</a><br></strong>
+          <i class="fa fa-at"/><strong><a href="mailto:{{email}}">{{" "+email}}</a><br></strong>
+          <i class="fa fa-envelope"/><strong>{{" "+address.fullName}} <br>
+      </div>
+           ]]></template>
+    </cards>
+    
+    
+    
+     <action-view name="action-contact-view-open-sale-order-lines-for-customer" title=""  model="com.axelor.sale.db.SaleOrderLine">
+        <view type="grid" name="sale-order-line-grid-from-menu" />
+        <view-param name="limit" value="20"/>
+        <view-param name="popup" value="true"/>    
+        <domain>self.saleOrder.customer = :Customer</domain>
+        <context name="Customer" expr="eval:__self__"/>
+    </action-view>
+
+    <action-condition name="action-contact-condition-change-birth-date">
+     <check field="birthDate"
+            if="birthDate &lt; LocalDate.of(1930, 1, 1)"
+            error="Should be &gt; to 1930" />
+    </action-condition>
+</object-views>

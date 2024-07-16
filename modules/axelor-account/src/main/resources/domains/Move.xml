@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models
+	xmlns="http://axelor.com/xml/ns/domain-models"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
+  https://axelor.com/xml/ns/domain-models/domain-models_6.0.xsd">
+	<module package="com.axelor.account.db" name="move" />
+	<sequence name="moveSeq" increment="1" initial="1" prefix="MOVE" padding="3"/>
+	<entity name="Move">
+		<string name="reference" title="Reference" namecolumn="true"
+			readonly="true" unique="true" sequence="moveSeq"></string>
+		<date name="operationdate" title="Operation date" required="true"></date>
+		<one-to-many ref="com.axelor.account.db.MoveLine"
+			name="moveLineList" title="Move Lines" mappedBy="move"/>
+		<many-to-one ref="com.axelor.invoice.db.Invoice"
+			name="invoice"></many-to-one>
+	</entity>
+
+</domain-models>

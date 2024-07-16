@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  	https://axelor.com/xml/ns/object-views/object-views_6.0.xsd">
+
+	<menuitem title="Teamwork" name="menu-team" hidden="true"
+		id="hide-menu-team" />
+	<menuitem title="Documents" name="menu-dms" hidden="true"
+		id="hide-menu-dms" />
+	<menuitem title="Accounting" name="accounting-root"
+		icon="fa-calculator" />
+	<menuitem title="Move" name="accounting-root-move"
+		parent="accounting-root" action="action.move.view.move" />
+	<menuitem title="Move line" name="accounting-root-move-line"
+		parent="accounting-root" action="action.move.line.view.move.line" />
+	<menuitem title="Data" name="accounting-root-data"
+		parent="accounting-root" icon="fa-database" />
+	<menuitem title="Account" name="accounting-root-data-account"
+		parent="accounting-root-data" action="action.account.view.account" />
+
+	<action-view name="action.account.view.account"
+		title="Move" model="com.axelor.account.db.Account">
+		<view type="grid" name="account-grid" />
+		<view type="form" name="account-form" />
+	</action-view>
+
+	<action-view name="action.move.view.move" title="Moves"
+		model="com.axelor.account.db.Move">
+		<view type="grid" name="move-grid" />
+		<view type="form" name="move-form" />
+	</action-view>
+
+	<action-view name="action.move.line.view.move.line"
+		title="Move lines" model="com.axelor.account.db.MoveLine">
+		<view type="grid" name="move-line-grid" />
+		<view type="form" name="move-line-form" />
+	</action-view>
+</object-views>

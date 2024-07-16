@@ -1,0 +1,11 @@
+plugins {
+  id 'com.axelor.app'
+}
+axelor {
+  title = 'Axelor Account'
+}
+dependencies{
+	implementation project(':modules:axelor-sale')
+	implementation project(':modules:axelor-contact')
+	implementation project(':modules:axelor-invoice')
+}

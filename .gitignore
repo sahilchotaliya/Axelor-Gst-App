@@ -1,0 +1,50 @@
+# Gradle
+build/
+.gradle/
+
+# Eclipse
+bin/
+.project
+.classpath
+.settings/
+.metadata/
+
+# IntelliJ
+out/
+.idea/
+*.iml
+*.ipr
+*.iws
+atlassian-ide-plugin.xml
+
+# NetBeans
+.nbattrs
+
+# Virtual machine crash logs
+hs_err_pid*
+
+# Backup files
+*.swp
+*~
+.#*
+[#]*#
+
+# dotenv or direnv
+.env
+.envrc
+
+# Miscellaneous
+*.log
+.clover
+.DS_Store
+
+# Profiler and heap dumps
+*.jps
+*.hprof
+/.nb-gradle/
+
+# JavaScript
+node_modules/
+
+# Large file exceeding GitHub's limit
+build/libs/axelor-demo-1.0.0.war

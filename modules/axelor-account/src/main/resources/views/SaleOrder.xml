@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  	https://axelor.com/xml/ns/object-views/object-views_6.0.xsd">
+  	
+  	<grid model="com.axelor.sale.db.SaleOrder" title="Sale orders" name="sale-order-grid" id="account-sale-order-grid" extension="true">
+  		<extend target="//field[@name='confirmationDateT']">
+  			<insert position="after">
+  				<field name="estimatedInvoiceDate" title="Estimated invoice date"></field>
+  			</insert>
+  		</extend>
+  	</grid>
+  	
+  	<form model="com.axelor.sale.db.SaleOrder" title="Sale order" name="sale-order-form" id="account-sale-order-form" extension="true">
+  		<extend target="//panel[@name='datesPanel']">
+  			<attribute name="readonly" value="false"/>
+  		</extend>
+  		<extend target="//field[@name='quotationDateT']">
+  			<attribute name="readonly" value="true"/>
+  		</extend>
+  		<extend target="//field[@name='confirmationDateT']">
+  			<attribute name="readonly" value="true"/>
+  			<insert position="after">
+  				<field name="estimatedInvoiceDate"></field>
+  			</insert>
+  		</extend>
+  		<extend target="//button[@name='finalizequotation']">
+  			<insert position="after">
+  				<button onClick="action.sale.order.method.on.click.generateInvoice" name="generateInvoiceBtn" title="Generate Invoice" showIf="statusSelect=='CONFIRMED'"/>
+  			</insert>
+  		</extend>
+  	</form>
+  	
+  	<action-method name="action.sale.order.method.on.click.generateInvoice">
+  		<call class="com.axelor.account.web.AccountController" method="generateInvoiceFromSaleOrder"/>
+  	</action-method>
+</object-views>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  	https://axelor.com/xml/ns/object-views/object-views_6.0.xsd">
+
+	<grid model="com.axelor.invoice.db.InvoiceLine"
+		title="InvoiceLines" name="invoice-line-grid">
+		<field name="discription"></field>
+		<field name="quantity" ></field>
+		<field name="exTaxTotal"></field>
+		<field name="inTaxTotal"></field>
+		<field name="taxRate" ></field>
+		<field name="unitPriceUntaxed" ></field>
+		<field name="product" ></field>
+	</grid>
+
+
+	<form model="com.axelor.invoice.db.InvoiceLine"
+		title="InvoiceLine" name="invoice-line-form" onNew="action-invoice-line-method-on-new" readonlyIf="_flag">
+		<panel itemSpan="6" name="invoiclinePanel">
+			<field name="product" onChange="action-invoice-line-method-on-change-product-unitpriceuntaxed-quantity"></field>
+			<field name="discription"></field>
+			<field name="unitPriceUntaxed" onChange="action-invoice-line-method-on-change-product-unitpriceuntaxed-quantity"></field>	
+			<field name="quantity" onChange="action-invoice-line-method-on-change-product-unitpriceuntaxed-quantity"></field>
+			<field name="taxRate" onChange="action-invoice-line-method-on-change-taxRate"></field>
+			<field name="exTaxTotal"></field>
+		</panel>
+	</form>
+
+	<form model="com.axelor.invoice.db.InvoiceLine"
+		title="InvoiceLine" name="invoice-line-form-from-menu" readonlyIf="true">
+		<panel-include view="invoice-line-form"/>
+	</form>
+	
+
+	<!-- On new -->
+	<action-method name="action-invoice-line-method-on-new">
+		<call class="com.axelor.invoice.web.InvoiceLineController" method="settaxRate"/>
+	</action-method>
+	
+	<!-- on change -->
+	<action-method name="action-invoice-line-method-on-change-product-unitpriceuntaxed-quantity">
+		<call class="com.axelor.invoice.web.InvoiceLineController" method="setproduct_uput_product"/>
+	</action-method>
+	
+	<!-- on cnahge taxrate -->
+	<action-method name="action-invoice-line-method-on-change-taxRate">
+		<call class="com.axelor.invoice.web.InvoiceLineController" method="taxRate"/>
+	</action-method>
+</object-views>

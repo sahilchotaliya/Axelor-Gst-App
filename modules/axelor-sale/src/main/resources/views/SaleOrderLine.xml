@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  	https://axelor.com/xml/ns/object-views/object-views_6.0.xsd">
+
+	<grid model="com.axelor.sale.db.SaleOrderLine"
+		title="SaleOrderLines" name="sale-order-line-grid">
+		<field name="description"></field>
+		<field name="quantity"></field>
+		<field name="taxRate"></field>
+		<field name="exTaxTotal"></field>
+	</grid>
+
+	<form model="com.axelor.sale.db.SaleOrderLine"
+		title="Sale Order Line" name="sale-order-line-form"
+		onNew="action-sale-order-line-attribute-on-new"
+		onLoad="action-sale-order-line-attribute-on-load">
+		<panel>
+			<help css="alert-info" showIf="!product">Please fill the product first
+			</help>
+			<field name="product" domain="unitPriceUntaxed &gt;0"
+				onChange="action-sale-order-line-record-on-change"></field>
+			<field name="description" readonlyIf="product==null"></field>
+			<field name="unitPriceUntaxed" readonlyIf="product==null"
+				onChange="action-sale-order-line-record-on-change-quantity-and-unitPriceUntaxed"></field>
+			<field name="quantity"
+				onChange="action-sale-order-line-record-on-change-quantity-and-unitPriceUntaxed"></field>
+			<field name="taxRate"></field>
+			<field name="exTaxTotal" readonly="true"></field>
+		</panel>
+
+	</form>
+
+
+
+	<grid model="com.axelor.sale.db.SaleOrderLine"
+		title="SaleOrderLines" name="sale-order-line-grid-from-menu"
+		canArchive="false" canDelete="false" canEdit="false" canNew="false"
+		editable="false" groupBy="product" edit-icon="false">
+		<field name="product"></field>
+		<field name="description"></field>
+		<field name="unitPriceUntaxed"></field>
+		<field name="quantity" aggregate="sum"></field>
+		<field name="taxRate"></field>
+		<field name="exTaxTotal"></field>
+		<field name="saleOrder"></field>
+		<field name="saleOrder.statusSelect"></field>
+		<field name="saleOrder.customer"></field>
+		<field name="product.productcatagory"></field>
+	</grid>
+
+	<form model="com.axelor.sale.db.SaleOrderLine"
+		title="SaleOrderLine" name="sale-order-line-form-from-menu"
+		canArchive="false" canDelete="false" canEdit="false" canNew="false"
+		canCopy="false">
+		<panel-include view="sale-order-line-form" />
+		<panel sidebar="true" readonly="true">
+			<field name="saleOrder"></field>
+			<field name="saleOrder.customer"></field>
+			<field name="product.productcatagory"></field>
+		</panel>
+	</form>
+
+	<!-- Action on new -->
+	<action-attrs
+		name="action-sale-order-line-attribute-on-new">
+		<attribute name="value" for="taxRate" expr="0.2"
+			if="!id" />
+		<attribute name="hidden" for="taxRate" expr="eval: !__parent__?.customer?.isSubjectToTaxes"
+			/>
+	</action-attrs>
+
+	<!-- Action on Load -->
+	<action-attrs
+		name="action-sale-order-line-attribute-on-load">
+		<attribute name="hidden" for="taxRate" expr="true"
+			if="saleOrder?.customer?.isSubjectToTaxes" />
+	</action-attrs>
+
+	<!-- Action on change -->
+	<action-record
+		name="action-sale-order-line-record-on-change"
+		model="com.axelor.sale.db.SaleOrderLine">
+		<field name="description" expr="eval:product.name"
+			if="product!=null" />
+		<field name="unitPriceUntaxed" expr="eval:product.unitPriceUntaxed"
+			if="product!=null" />
+		<field name="exTaxTotal" expr="eval:quantity*unitPriceUntaxed" />
+	</action-record>
+
+	<!-- Action on change quantity and unitprice -->
+	<action-record
+		name="action-sale-order-line-record-on-change-quantity-and-unitPriceUntaxed"
+		model="com.axelor.sale.db.SaleOrderLine">
+		<field name="exTaxTotal" expr="eval: quantity*unitPriceUntaxed" />
+	</action-record>
+</object-views>

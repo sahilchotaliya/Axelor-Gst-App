@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<csv-inputs xmlns="http://axelor.com/xml/ns/data-import"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://axelor.com/xml/ns/data-import
+      https://axelor.com/xml/ns/data-import/data-import_6.0.xsd">
+      
+      
+    <input file="contact_title.csv" type="com.axelor.contact.db.Title" separator=";" search="self.code = :code">
+        <bind column="code" to="code" />
+        <bind column="name" to="name" />
+    </input>
+    
+    <input file="contact_country.csv" type="com.axelor.contact.db.Country" separator=";" 
+        search="self.code = :code">
+        <bind column="code" to="code" />
+        <bind column="name" to="name" />
+    </input>
+    
+    <input file="contact_address.csv" search="self.importId= :Ref"
+        type="com.axelor.contact.db.Address" separator=";">
+        <bind to="importId" column="Ref"/>
+        <bind to="numberAndStreet" column="numberAndStreet"/>
+        <bind to="zip" column="zip"/>
+        <bind to="city" column="city"/>
+        <bind to="country" column="country_code" search="self.code= :country_code" update="true"/>
+        <bind to="fullName" eval="${numberAndStreet}+' '+${zip}+' '+${city}"/>
+    </input>
+    
+      <input file="contact_contact.csv"
+        type="com.axelor.contact.db.Contact" separator=";">
+        <bind to="title" search="self.code= :title" column="title"
+            update="true" >
+        </bind>
+        <bind to="firstName" column="firstName"></bind>
+        <bind to="lastName" column="lastName"></bind>
+        <bind to="fullName" eval="${title.Name}+' '+${firstName}+' '+${lastName}"></bind>
+        <bind to="birthDate" column="birthDate" adapter="LocalDate"></bind>
+        <bind to="email" column="email"></bind>
+        <bind to="phone" column="phone"></bind>
+        <bind to="isSubjectToTaxes" column="isSubjectToTaxes"></bind>
+        <bind to="address" search="self.importId= :address_importId"
+            update="true">
+          
+        </bind>
+    </input>
+    
+                                     <!-- Permissions -->
+                                     
+                                     
+                                     
+    
+    <input file="auth_permission.csv" type="com.axelor.auth.db.Permission" separator=";">
+    <bind to="canCreate" column="canCreate"></bind>
+    <bind to="canRead" column="canRead"></bind>
+    <bind to="canExport" column="canExport"></bind>
+    <bind to="canRemove" column="canRemove"></bind>
+    <bind to="canWrite" column="canWrite"></bind>
+    <bind to="name" column="name"></bind>
+    <bind to="object" column="object"></bind>
+    <bind to="roles" column="roles" search="self.name= : roles"></bind>
+    <bind to="condition" column="conditionValue"></bind>
+    <bind to="conditionParams" column="conditionParam"></bind>
+    
+    </input> 
+    
+    <input file="auth_role.csv" type="com.axelor.auth.db.Role" separator=";">
+    <bind to="description" column="description"></bind>
+    <bind to="name" column="name" ></bind>
+   <bind to="menus" column="menus" eval="menus.split('\\|') as List" search="self.name in :menus"></bind>
+        <bind to="permissions" column="permissions" eval="permissions.split('\\|') as List" search="self.name in :permissions" ></bind>
+        <bind to="metaPermissions" column="metaPermissions" search="self.name= :metaPermission"></bind>
+        </input> 
+    
+    <input file="auth_user.csv" type="com.axelor.auth.db.User" separator=";">
+    <bind to="code" column="code"></bind>
+    <bind to="email" column="email"></bind>
+    <bind to="name" column="name"></bind>
+    <bind to="password" column="password"></bind>
+    <bind to="roles" column="roles" search="self.name= :roles"></bind>
+    </input>   
+    
+      <input file="meta_permission.csv" type="com.axelor.meta.db.MetaPermission" separator=";" search="self.name= :name">
+    <bind to="name" column="name"></bind>
+    <bind to="object" column="object"></bind>
+    </input>
+    
+    
+    <input file="meta_permission_rule.csv" type="com.axelor.meta.db.MetaPermissionRule" separator=";">
+    <bind to="canRead" column="canRead"></bind>
+    <bind to="canExport" column="canExport"></bind>
+    <bind to="canWrite" column="canWrite"></bind>
+    <bind to="field" column="field"></bind>
+    <bind to="metaPermission" column="metaPermission" search="self.name = : metaPermission"></bind>
+    </input>  
+	 
+</csv-inputs>

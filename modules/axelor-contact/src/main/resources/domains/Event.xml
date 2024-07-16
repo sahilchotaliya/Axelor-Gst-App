@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models
+	xmlns="http://axelor.com/xml/ns/domain-models"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
+  https://axelor.com/xml/ns/domain-models/domain-models_6.0.xsd">
+
+
+
+	<module name="contact" package="com.axelor.contact.db" />
+
+
+	<entity name="Event">
+
+
+		<string name="title" required="true" title="Title"
+			namecolumn="true" />
+		<datetime name="startDate" required="true" title="Start date"></datetime>
+		<datetime name="endDate" required="true" title="End date"></datetime>
+		<integer name="statusSelect" title="Status"
+			selection="contact.event.status.select" required="true"></integer>
+		<integer name="typeSelect" title="Type"
+			selection="contact.event.type.select" required="true"></integer>
+		<string name="notes" title="Notes" large="true"></string>
+		<many-to-one ref="com.axelor.contact.db.Contact"
+			name="plannedFor" title="Planned for"></many-to-one>
+			<long name="duration" title="Duration" readonly="true"/>
+			
+
+		<extra-code>
+   
+  
+           public static final int STATUS_DRAFT = 0;
+           public static final int STATUS_PROPOSED = 1;
+           public static final int TYPE_OTHER = 0;
+          
+
+   
+   </extra-code>
+<entity-listener class="com.axelor.contact.db.repo.ContactListener"/>
+
+	</entity>
+
+</domain-models>

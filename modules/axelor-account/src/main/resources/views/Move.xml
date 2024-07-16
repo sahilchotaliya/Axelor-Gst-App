@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  	https://axelor.com/xml/ns/object-views/object-views_6.0.xsd">
+  	
+  	<grid model="com.axelor.account.db.Move" title="Moves" name="move-grid">
+  		<field name="reference"></field>
+  		<field name="operationdate"></field>
+  		<field name="invoice"></field>
+  	</grid>
+  	<form model="com.axelor.account.db.Move" title="Move" name="move-form">
+  		<panel name="mainPanel" title="Overview">
+  			<field name="reference" readonly="true"></field>
+  			<field name="invoice"></field>
+  			<panel-related field="moveLineList" colSpan="12" grid-view="move-line-grid"></panel-related>
+  		</panel>
+  		<panel sidebar="true">
+  			<field name="operationdate"></field>
+  		</panel>
+  	</form>
+</object-views>

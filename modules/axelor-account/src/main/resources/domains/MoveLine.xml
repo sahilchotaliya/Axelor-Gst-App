@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models
+	xmlns="http://axelor.com/xml/ns/domain-models"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
+  https://axelor.com/xml/ns/domain-models/domain-models_6.0.xsd">
+	<module package="com.axelor.account.db" name="moveline" />
+	<sequence name="moveLineSeq" prefix="ML" padding="3" initial="1" increment="1"/>
+	<entity name="MoveLine">
+		<string name="reference" title="Reference" namecolumn="true"
+			readonly="true" unique="true" sequence="moveLineSeq"></string>
+		<decimal name="debit" title="Debit" required="true" min="0"></decimal>
+		<decimal name="credit" title="Credit" required="true" min="0"></decimal>
+		<many-to-one ref="com.axelor.account.db.Move" name="move"
+			required="true"></many-to-one>
+		<many-to-one ref="com.axelor.account.db.Account"
+			name="account" title="Account"></many-to-one>
+	</entity>
+</domain-models>

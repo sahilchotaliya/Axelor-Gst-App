@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  	https://axelor.com/xml/ns/object-views/object-views_6.0.xsd">
+	<chart name="chart.last.month.sales.per.product.catagory"
+		title="Last month sales per product catagory">
+		<dataset type="jpql">
+  			<![CDATA[
+  				SELECT
+                    ssol.product.productcatagory.name AS category,
+                    SUM(ssol.exTaxTotal) as amount
+                FROM
+                    SaleOrderLine AS ssol
+                INNER JOIN
+                	SaleOrder as sso
+                ON 
+                	sso.id=ssol.saleOrder
+                WHERE
+                	sso.confirmationDateT BETWEEN CURRENT_DATE - 30 AND CURRENT_DATE
+                GROUP BY
+                    category
+  			]]>
+  		</dataset>
+		<category key="category" type="number"
+			title="Product catagory" />
+		<series key="amount" type="bar"
+			 title="Sum of totals ex tax"/>
+	</chart>
+	
+	<chart name="chart.turnover.per.customer" title="Turn over per customer">
+		<search-fields>
+			<field name="customer_id" target="com.axelor.contact.db.Contact" type="reference"/>
+		</search-fields>
+		
+	<dataset type="sql">
+		<![CDATA[
+			SELECT 
+				SUM(ssol.ex_tax_total) as amount,
+				CASE
+                    WHEN sso.status_select = 'cancelled' THEN 'Proportion of turnover lost on canceled orders'
+                    WHEN sso.status_select = 'confirmed' THEN 'Proportion of turnover earned on confirmed orders'
+                    WHEN sso.status_select = 'quotation' THEN 'Proportion of forecast turnover on quotes'
+                END AS status
+			FROM  
+				sale_sale_order as sso
+			LEFT JOIN 
+				sale_sale_order_line as ssol 
+			ON 
+				ssol.sale_order=sso.id 
+			WHERE 
+				sso.customer=:customer_id
+			AND 
+				sso.status_select!='draft' 
+			GROUP BY 
+				status;
+		]]>		
+	</dataset>
+	<category key="status"/>
+	<series key="amount" type="pie"/>
+	</chart>
+	
+	<chart name="chart.invoice.per.month.over.3.month" title="Amount invoiced per month over 3 months" onInit="action-attr">
+		<search-fields>
+			<field name="calender" type="date"/>
+			<field name="customerId" type="reference" target="com.axelor.contact.db.Contact"/>
+		</search-fields>
+		<dataset type="rpc">com.axelor.dashboard.web.DashboardController:getInvoiceData</dataset>
+		
+		<category key="_month" title="Month"/>
+		<series key="_amount" type="bar" title="Invoice amount"/>
+	</chart>
+	<action-attrs name="action-attr">
+		<attribute name="value" for="calender" expr="eval: __date__.minusMonths(3)"/>
+	</action-attrs>
+</object-views>

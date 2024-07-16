@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  	https://axelor.com/xml/ns/object-views/object-views_6.0.xsd">
+
+
+
+	<selection name="contact.event.status.select">
+		<option value="0" color="grey">Draft</option>
+		<option value="1" color="purple"> Proposed</option>
+		<option value="2" color="indigo">Accepted</option>
+		<option value="3" color="green">Finished</option>
+		<option value="4" color="amber">Missing contact</option>
+		<option value="5" color="brown">Postponed</option>
+		<option value="6" color="red">Refused</option>
+		<option value="7" color="bluegrey">Cancelled</option>
+
+	</selection>
+
+	<selection name="contact.event.type.select">
+
+		<option value="0">Other</option>
+		<option value="1">Phone Call</option>
+		<option value="2">Meeting</option>
+	</selection>
+
+
+	<grid model="com.axelor.contact.db.Event" title="Events"
+		name="event-grid">
+
+		<field name="title"></field>
+		<field name="typeSelect"></field>
+		<field name="startDate"></field>
+		<field name="endDate"></field>
+		<field name="statusSelect"></field>
+	</grid>
+	
+	        <!-- dashboard grid -->
+	
+	<grid model="com.axelor.contact.db.Event" title="Events"
+		name="event-dashboard-grid" orderBy="startDate">
+	<hilite if="typeSelect == 2" color="green"/>
+		<field name="title"></field>
+		<field name="typeSelect"></field>
+		<field name="startDate"></field>
+		<field name="endDate"></field>
+		<field name="statusSelect" widget="SingleSelect"/>
+		<field name="plannedFor"></field>
+	</grid>
+	
+	<action-view name="action-view-dashboard-event-grid" title="Upcoming events" model="com.axelor.contact.db.Event">
+	<view type="grid" name="event-dashboard-grid"/>
+	
+	</action-view>
+	
+	            <!--  -->
+
+<form model="com.axelor.contact.db.Event" title="Event"
+		name="event-form" width="large" onSave="action-event-save">
+		
+		<panel title="mainPanel">
+		
+		<field name="title" colSpan="4"></field>
+		<field name="statusSelect" colSpan="4"></field>
+		<field name="typeSelect" colSpan="4"></field>
+		<field name="plannedFor" colSpan="4"></field>
+		<field name="startDate" colSpan="4"></field>
+		<field name="endDate" colSpan="4"></field>
+		<field name="duration" colSpan="4"/>
+		<field name="notes" colSpan="12"></field>
+		
+		</panel>
+		
+	</form>
+
+	<kanban columnBy="statusSelect" model="com.axelor.contact.db.Event" sequenceBy="typeSelect" title="Kanban" name="event-kanban">
+        <field name="title" />
+        <field name="typeSelect"/>
+        <field name="plannedFor.fullName" />
+        <field name="plannedFor.email"/>
+        <field name="plannedFor.phone"/>
+        <field name="startDate"/>
+        <field name="endDate"/>
+       
+        
+        <template><![CDATA[
+        
+	      <h4>{{title}}</h4>
+	      <span class="label 
+	        {{ typeSelect == 1 ? 'label-success' 
+	        : typeSelect == 2 ? 'label-warning' 
+	        : 'label-secondary' }}">
+	        {{ typeSelect == 0 ? 'Other' 
+	        : typeSelect == 1 ? 'Phone' 
+	        : 'Meeting' }}
+	    </span><br>
+	
+	      <strong style='margin-bottom:8px'>{{plannedFor.fullName}}</strong><br>
+	      
+	       <i class="fa fa-phone"/><strong><a href="tel:{{plannedFor.email}}">{{" "+plannedFor.email}}</a><br></strong><br>
+	          <i class="fa fa-at"/><strong><a href="mailto:{{plannedFor.phone}}">{{" "+plannedFor.phone}}</a><br></strong>
+	        <i class='fa fa-clock-o'></i> <span>{{startDate|date:'YYYY-MM-DD HH:MM:SS'}}</span><br>
+	          <i class='fa fa-clock-o'></i> <span>{{endDate|date:'YYYY-MM-DD HH:MM:SS'}}</span>
+	      </div>
+  ]]></template>
+  
+  
+  
+    </kanban>
+    
+ 	<calendar name="event-calender"
+        model="com.axelor.contact.db.Event" eventStart="startDate"
+        eventStop="endDate" title="Event Calender" colorBy="typeSelect">
+        <field name="title"	/>
+        </calendar>
+        
+    <action-validate name="action-event-validate-dates-sav">
+   
+      <error message="Dates are incorrect" if="startDate &gt;= endDate"/>   
+  
+        </action-validate>
+
+</object-views>

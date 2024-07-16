@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  	https://axelor.com/xml/ns/object-views/object-views_6.0.xsd">
+  	<dashboard name="welcome.dashboard" title="Home Dashboard">
+  		<dashlet action="action-event-view-dashboard-event-grid" colSpan="12" title="Upcoming events"/>
+ 		<dashlet action="chart:chart.last.month.sales.per.product.catagory"/>
+ 		<dashlet action="chart:chart.turnover.per.customer"/>
+ 		<dashlet action="chart:chart.invoice.per.month.over.3.month"/>
+  	</dashboard>
+</object-views>
